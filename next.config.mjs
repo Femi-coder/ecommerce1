@@ -10,6 +10,8 @@ const nextConfig = {
       { protocol: "https", hostname: "encrypted-tbn2.gstatic.com" },
       { protocol: "https", hostname: "cdn.media.amplience.net" },
       { protocol: "https", hostname: "www.staycoldapparel.com" },
+      { protocol: "https", hostname: "www.jiomart.com" },
+      { protocol: "https", hostname: "hatroom.eu" },
     ],
   },
 };
