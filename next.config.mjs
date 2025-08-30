@@ -12,6 +12,12 @@ const nextConfig = {
       { protocol: "https", hostname: "www.staycoldapparel.com" },
       { protocol: "https", hostname: "www.jiomart.com" },
       { protocol: "https", hostname: "hatroom.eu" },
+      { protocol: "https", hostname: "m.media-amazon.com" },
+      { protocol: "https", hostname: "i8.amplience.net" },
+      { protocol: "https", hostname: "www.rebelsport.com.au" },
+      { protocol: "https", hostname: "lsco.scene7.com" },
+      { protocol: "https", hostname: "img.freepik.com" },
+       { protocol: "https", hostname: "www.closurelondon.com" },
     ],
   },
 };

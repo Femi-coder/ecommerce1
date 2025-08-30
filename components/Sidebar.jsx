@@ -31,7 +31,7 @@ export default function Sidebar() {
   return (
     <div>
       <h1 style={{ fontSize: 22, margin: "0 0 16px", fontWeight: 700 }}>
-        My Shop
+        Femi Shop
       </h1>
 
       <ul style={{ listStyle: "none", padding: 0, display: "grid", gap: 6 }}>

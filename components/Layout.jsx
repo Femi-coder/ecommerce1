@@ -6,7 +6,7 @@ export default function Layout({ children }) {
       <aside style={{ borderRight: "1px solid #eee", padding: "20px" }}>
         <Sidebar />
       </aside>
-      <main style={{ padding: "32px", maxWidth: 1200, width: "100%" }}>
+      <main style={{ padding: "36px", maxWidth: 1200, width: "100%" }}>
         {children}
       </main>
     </div>

@@ -3,7 +3,7 @@ import Image from "next/image";
 import { useCart } from "../context/CartContext";
 import { money } from "../lib/format";
 
-export default function CategoryGrid({ category, title }) {
+export default function CategoryGrid({ category, title, aspect = "3 / 4", fit = "cover"  }) {
   const [items, setItems] = useState([]);
   const cart = useCart();
 
@@ -16,7 +16,7 @@ export default function CategoryGrid({ category, title }) {
     })();
   }, [category]);
 
-  // 🔹 Group items by subcategory
+  // Group items by subcategory
   const grouped = items.reduce((acc, item) => {
     const sub = item.subcategory || "Other";
     if (!acc[sub]) acc[sub] = [];
@@ -38,58 +38,31 @@ export default function CategoryGrid({ category, title }) {
               gap: "16px",
             }}
           >
-            {grouped[sub].map((p) => (
+             {grouped[sub].map((p) => (
               <article key={p._id} className="card">
-                <div
-                  style={{
-                    position: "relative",
-                    height: 200,
-                    borderRadius: 20,
-                    overflow: "hidden",
-                    background: "#f4f4f4",
-                  }}
-                >
+                {/* uniform image box */}
+                <div className="imgbox" style={{ ["--aspect"]: aspect, ["--fit"]: fit }}>
                   {p.image ? (
                     <Image
                       src={p.image}
                       alt={p.name}
                       fill
-                      sizes="(max-width: 640px) 200vw, (max-width: 1024px) 50vw, 33vw"
-                      style={{ objectFit: "contain", backgroundColor: "#fff" }}
+                      sizes="280px"
+                      className="img"                 // so .imgbox .img CSS applies
                     />
                   ) : (
-                    <div
-                      style={{
-                        display: "grid",
-                        placeItems: "center",
-                        height: "100%",
-                        color: "#888",
-                      }}
-                    >
-                      No image
-                    </div>
+                    <div className="imgbox__fallback">No image</div>
                   )}
                 </div>
 
-                <div
-                  style={{
-                    display: "flex",
-                    justifyContent: "space-between",
-                    margin: "12px 0",
-                  }}
-                >
+                <div style={{ display: "flex", justifyContent: "space-between", margin: "12px 0" }}>
                   <h4>{p.name}</h4>
                   <span>{money(p.price)}</span>
                 </div>
 
                 <button
                   onClick={() =>
-                    cart.add({
-                      id: p._id,
-                      name: p.name,
-                      price: p.price,
-                      image: p.image ?? "",
-                    })
+                    cart.add({ id: p._id, name: p.name, price: p.price, image: p.image ?? "" })
                   }
                 >
                   Add to cart

@@ -1,9 +1,34 @@
+import { useState } from "react";
 import { useCart } from "../context/CartContext";
 import { money } from "../lib/format";
 
 export default function Cart() {
   const cart = useCart();
   const { items, totals } = cart;
+  const [loading, setLoading] = useState(false);
+
+  const checkout = async () => {
+    if (!items.length || loading) return;
+    try {
+      setLoading(true);
+      const res = await fetch("/api/create-checkout-session", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ cartItems: items }), // [{ name, price, qty, image }]
+      });
+      const data = await res.json();
+      if (data?.url) {
+        window.location.href = data.url; // redirect to Stripe hosted page
+      } else {
+        alert(data?.error || "Failed to start checkout.");
+      }
+    } catch (e) {
+      console.error(e);
+      alert("Checkout failed. Please try again.");
+    } finally {
+      setLoading(false);
+    }
+  };
 
   return (
     <section>
@@ -25,7 +50,7 @@ export default function Cart() {
                 </tr>
               </thead>
               <tbody>
-                {items.map(item => (
+                {items.map((item) => (
                   <tr key={item.id} style={{ borderTop: "1px solid #eee" }}>
                     <td style={{ padding: 8, display: "flex", alignItems: "center", gap: 12 }}>
                       {item.image && (
@@ -45,9 +70,7 @@ export default function Cart() {
                           type="number"
                           min="1"
                           value={item.qty}
-                          onChange={e =>
-                            cart.setQty(item.id, parseInt(e.target.value || "1", 10))
-                          }
+                          onChange={(e) => cart.setQty(item.id, parseInt(e.target.value || "1", 10))}
                           style={{
                             width: 56,
                             textAlign: "center",
@@ -68,7 +91,6 @@ export default function Cart() {
                   </tr>
                 ))}
               </tbody>
-
             </table>
           </div>
 
@@ -76,12 +98,20 @@ export default function Cart() {
             <button onClick={cart.clear}>Clear cart</button>
             <div className="card" style={{ minWidth: 260 }}>
               <div style={{ display: "flex", justifyContent: "space-between" }}>
-                <span>Items</span><strong>{totals.count}</strong>
+                <span>Items</span>
+                <strong>{totals.count}</strong>
               </div>
               <div style={{ display: "flex", justifyContent: "space-between", marginTop: 8 }}>
-                <span>Subtotal</span><strong>{money(totals.subtotal)}</strong>
+                <span>Subtotal</span>
+                <strong>{money(totals.subtotal)}</strong>
               </div>
-              <button style={{ marginTop: 12, width: "100%" }}>Checkout</button>
+              <button
+                style={{ marginTop: 12, width: "100%" }}
+                onClick={checkout}
+                disabled={loading}
+              >
+                {loading ? "Redirecting…" : "Checkout"}
+              </button>
             </div>
           </div>
         </>
