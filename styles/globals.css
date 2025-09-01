@@ -287,5 +287,44 @@ button:active,.btn:active{ transform:translateY(1px); }
 
   .sidebar.open {
     left: 0;
+  }/* Single-column on phones */
+@media (max-width: 900px) {
+  .layout {
+    grid-template-columns: 1fr !important;   /* no second column */
+    gap: 16px;
   }
+}
+
+/* Off-canvas sidebar for mobile */
+@media (max-width: 900px) {
+  .sidebar {
+    position: fixed !important;
+    top: 0;
+    left: -100%;
+    width: 84vw;                /* drawer width */
+    max-width: 320px;
+    height: 100dvh;
+    padding: 16px;
+    background: var(--panel);
+    border-right: 1px solid var(--border);
+    box-shadow: 0 10px 40px rgba(0,0,0,.35);
+    z-index: 1000;
+    transition: left .28s ease;
+  }
+  .sidebar.open { left: 0; }
+
+  /* page content should be full width */
+  main { padding: 16px; }
+
+  /* optional dimmed backdrop when menu is open */
+  .sidebar-backdrop {
+    position: fixed; inset: 0;
+    background: rgba(0,0,0,.45);
+    backdrop-filter: blur(1px);
+    z-index: 999;
+  }
+}
+
+/* Kill any stray horizontal scroll */
+html, body { max-width: 100%; overflow-x: hidden; }
 }

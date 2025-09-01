@@ -33,18 +33,28 @@ export default function Sidebar() {
 
   return (
     <>
-      {/* Top bar with burger (mobile only) */}
-      <div className="topbar">
-        <button className="burger" onClick={() => setOpen(!open)}>☰</button>
-        <h1 className="logo">Femi Shop</h1>
+      {/* Mobile top bar */}
+      <div className="topbar" style={{
+        display: "flex", alignItems: "center", gap: 12,
+        padding: "12px 16px", background: "var(--panel)",
+        borderBottom: "1px solid var(--border)"
+      }}>
+        <button
+          aria-label="Open menu"
+          onClick={() => setOpen(true)}
+          style={{ fontSize: 22, background: "none", border: 0, cursor: "pointer" }}
+        >
+          ☰
+        </button>
+        <h1 style={{ fontSize: 18, fontWeight: 700, margin: 0 }}>Femi Shop</h1>
       </div>
 
-      {/* Sidebar (collapsible on mobile) */}
-      <div className={`sidebar ${open ? "open" : ""}`}>
-        <h1 style={{ fontSize: 22, margin: "0 0 16px", fontWeight: 700 }}>
-          Femi Shop
-        </h1>
+      {/* Backdrop (mobile) */}
+      {open && <div className="sidebar-backdrop" onClick={() => setOpen(false)} />}
 
+      {/* Sidebar (desktop static; mobile off-canvas) */}
+      <div className={`sidebar ${open ? "open" : ""}`}>
+        <h1 style={{ fontSize: 22, margin: "0 0 16px", fontWeight: 700 }}>Femi Shop</h1>
         <ul style={{ listStyle: "none", padding: 0, display: "grid", gap: 6 }}>
           <LinkItem href="/" label="Home" onClick={() => setOpen(false)} />
           <LinkItem href="/tops" label="Tops" onClick={() => setOpen(false)} />
