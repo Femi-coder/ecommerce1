@@ -53,6 +53,7 @@ button,.btn{
   cursor:pointer;font-weight:600;
   transition:background .15s ease,transform .06s ease,border-color .15s ease,box-shadow .15s ease;
   box-shadow:0 0 0 rgba(0,0,0,0);
+  color: blue;
 }
 button:hover,.btn:hover{background:color-mix(in oklab,var(--panel) 92%, black)}
 button:active,.btn:active{transform:translateY(1px)}
@@ -124,4 +125,21 @@ button:active,.btn:active{transform:translateY(1px)}
 /* ---------- Reduce motion ---------- */
 @media (prefers-reduced-motion:reduce){
   *{transition:none !important;animation:none !important}
+}
+.subcategory-title {
+  font-size: 1.25rem;         
+  font-weight: 700;
+  color: var(--primary);      
+  margin-bottom: 16px;
+}
+.product-card {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.product-card button {
+  width: auto;     
+  padding: 8px 16px;      
+  align-self: flex-start; 
 }

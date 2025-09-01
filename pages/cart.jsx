@@ -94,9 +94,9 @@ export default function Cart() {
             </table>
           </div>
 
-          <div style={{ display: "flex", justifyContent: "space-between", marginTop: 16 }}>
+          <div style={{ display: "flex", justifyContent: "space-between", marginTop: 16, minWidth: 50 }}>
             <button onClick={cart.clear}>Clear cart</button>
-            <div className="card" style={{ minWidth: 260 }}>
+            <div className="card" style={{ minWidth: 250 }}>
               <div style={{ display: "flex", justifyContent: "space-between" }}>
                 <span>Items</span>
                 <strong>{totals.count}</strong>

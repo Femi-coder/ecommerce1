@@ -4,8 +4,8 @@ export default function FootwearPage() {
     <CategoryGrid
       category="Footwear"
       title="Footwear"
-      aspect="4 / 3"
-      fit="contain"
+      aspect="1.3 / 1"
+      fit="cover"
     />
   );
 }
