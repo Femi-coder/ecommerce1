@@ -1,7 +1,8 @@
-import { useEffect, useState } from "react";
-import { useRouter } from "next/router";
 import Link from "next/link";
+import { useRouter } from "next/router";
 import { useCart } from "../context/CartContext";
+import { useState, useEffect } from "react";
+
 
 const LinkItem = ({ href, label, onClick }) => {
   const { asPath } = useRouter();
@@ -30,48 +31,50 @@ const LinkItem = ({ href, label, onClick }) => {
 export default function Sidebar() {
   const { totals } = useCart();
   const [open, setOpen] = useState(false);
-  const router = useRouter();
 
-  // close drawer on route change
+  // prevent body scroll when drawer is open (mobile)
   useEffect(() => {
-    const close = () => setOpen(false);
-    router.events.on("routeChangeStart", close);
-    return () => router.events.off("routeChangeStart", close);
-  }, [router.events]);
-
-  // prevent background scroll when drawer is open
-  useEffect(() => {
-    const prev = document.body.style.overflow;
-    document.body.style.overflow = open ? "hidden" : prev || "";
-    return () => { document.body.style.overflow = prev; };
+    document.body.style.overflow = open ? "hidden" : "";
+    return () => (document.body.style.overflow = "");
   }, [open]);
 
   return (
     <>
       {/* Mobile top bar */}
-      <div className="topbar" style={{
-        display: "flex", alignItems: "center", gap: 12,
-        padding: "12px 16px", background: "var(--panel)",
-        borderBottom: "1px solid var(--border)"
-      }}>
+      <div className="topbar">
         <button
-          aria-label="Open menu"
+          className="menu-btn"
+          aria-label={open ? "Close menu" : "Open menu"}
           aria-expanded={open}
-          aria-controls="app-sidebar"
-          onClick={() => setOpen(true)}
+          onClick={() => setOpen(o => !o)}
           style={{ fontSize: 22, background: "none", border: 0, cursor: "pointer" }}
         >
-          ☰
+          {open ? "✕" : "☰"}
         </button>
         <h1 style={{ fontSize: 18, fontWeight: 700, margin: 0 }}>Femi Shop</h1>
       </div>
 
-      {/* Backdrop (mobile) */}
+      {/* Backdrop (click to close). It starts below the fixed topbar in CSS */}
       {open && <div className="sidebar-backdrop" onClick={() => setOpen(false)} />}
 
-      {/* Sidebar (desktop static; mobile off-canvas) */}
-      <div id="app-sidebar" className={`sidebar ${open ? "open" : ""}`}>
+      <div className={`sidebar ${open ? "open" : ""}`}>
+        {/* Close button - mobile only */}
+        <button
+          aria-label="Close menu"
+          onClick={() => setOpen(false)}
+          className="only-mobile"
+          style={{ fontSize: 22, background: "none", border: 0, cursor: "pointer", marginBottom: 8 }}
+        >
+          ✕
+        </button>
+
         <h1 style={{ fontSize: 22, margin: "0 0 16px", fontWeight: 700 }}>Femi Shop</h1>
+        <h1
+          className="sidebar-title"
+          style={{ fontSize: 22, margin: "0 0 16px", fontWeight: 700 }}
+        >
+          Femi Shop
+        </h1>
         <ul style={{ listStyle: "none", padding: 0, display: "grid", gap: 6 }}>
           <LinkItem href="/" label="Home" onClick={() => setOpen(false)} />
           <LinkItem href="/tops" label="Tops" onClick={() => setOpen(false)} />
