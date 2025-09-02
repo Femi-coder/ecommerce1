@@ -189,8 +189,7 @@ button:active, .btn:active { transform: translateY(1px); }
 .grid {
   display: grid;
   gap: 12px;
-  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); /* phone grid */
-  justify-content: start;
+  grid-template-columns: repeat(2, 1fr); /* phone grid */
 }
 
 @media (min-width: 768px) {
@@ -198,7 +197,7 @@ button:active, .btn:active { transform: translateY(1px); }
   h2 { font-size: 1.5rem; }
   .grid {
     gap: 16px;
-    grid-template-columns: repeat(auto-fit, minmax(220px, 280px));
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
   }
 }
 
