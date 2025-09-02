@@ -14,11 +14,11 @@ export default function Cart() {
       const res = await fetch("/api/create-checkout-session", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ cartItems: items }), // [{ name, price, qty, image }]
+        body: JSON.stringify({ cartItems: items }), // includes size if present
       });
       const data = await res.json();
       if (data?.url) {
-        window.location.href = data.url; // redirect to Stripe hosted page
+        window.location.href = data.url;
       } else {
         alert(data?.error || "Failed to start checkout.");
       }
@@ -38,80 +38,110 @@ export default function Cart() {
         <p>No items yet.</p>
       ) : (
         <>
-          <div className="card" style={{ overflowX: "auto" }}>
-            <table style={{ width: "100%", borderCollapse: "collapse" }}>
-              <thead>
-                <tr>
-                  <th style={{ textAlign: "left", padding: 8 }}>Product</th>
-                  <th style={{ textAlign: "right", padding: 8 }}>Price</th>
-                  <th style={{ textAlign: "center", padding: 8 }}>Qty</th>
-                  <th style={{ textAlign: "right", padding: 8 }}>Total</th>
-                  <th />
-                </tr>
-              </thead>
-              <tbody>
-                {items.map((item) => (
-                  <tr key={item.id} style={{ borderTop: "1px solid #eee" }}>
-                    <td style={{ padding: 8, display: "flex", alignItems: "center", gap: 12 }}>
-                      {item.image && (
-                        <img
-                          src={item.image}
-                          alt={item.name}
-                          style={{ width: 60, height: 60, objectFit: "cover", borderRadius: 8 }}
-                        />
-                      )}
-                      <span>{item.name}</span>
-                    </td>
-                    <td style={{ padding: 8, textAlign: "right" }}>{money(item.price)}</td>
-                    <td style={{ padding: 8, textAlign: "center" }}>
-                      <div style={{ display: "inline-flex", gap: 8, alignItems: "center" }}>
-                        <button onClick={() => cart.dec(item.id)}>-</button>
-                        <input
-                          type="number"
-                          min="1"
-                          value={item.qty}
-                          onChange={(e) => cart.setQty(item.id, parseInt(e.target.value || "1", 10))}
-                          style={{
-                            width: 56,
-                            textAlign: "center",
-                            padding: 8,
-                            borderRadius: 10,
-                            border: "1px solid #ddd",
-                          }}
-                        />
-                        <button onClick={() => cart.inc(item.id)}>+</button>
-                      </div>
-                    </td>
-                    <td style={{ padding: 8, textAlign: "right" }}>
-                      {money(item.qty * item.price)}
-                    </td>
-                    <td style={{ padding: 8, textAlign: "right" }}>
-                      <button onClick={() => cart.remove(item.id)}>Remove</button>
-                    </td>
+          {/* Keep everything centered and capped */}
+          <div className="cart-shell">
+            <div className="cart-wrap card">
+              {/* DESKTOP TABLE */}
+              <table className="cart-table">
+                <thead>
+                  <tr>
+                    <th>Product</th>
+                    <th style={{ textAlign: "right" }}>Price</th>
+                    <th style={{ textAlign: "center" }}>Qty</th>
+                    <th style={{ textAlign: "right" }}>Total</th>
+                    <th />
                   </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
+                </thead>
+                <tbody>
+                  {items.map((item) => (
+                    <tr key={`${item.id}|${item.size ?? ""}`}>
+                      <td className="cart-product-cell">
+                        {item.image && <img src={item.image} alt={item.name} />}
+                        <div>
+                          <div>{item.name}</div>
+                          {item.size && (
+                            <div className="muted" style={{ fontSize: ".9rem" }}>
+                              Size: <strong>{item.size}</strong>
+                            </div>
+                          )}
+                        </div>
+                      </td>
+                      <td style={{ textAlign: "right" }}>{money(item.price)}</td>
+                      <td style={{ textAlign: "center" }}>
+                        <div className="qty-controls">
+                          <button onClick={() => cart.dec(item.id, item.size)}>-</button>
+                          <input
+                            type="number"
+                            min="1"
+                            value={item.qty}
+                            onChange={(e) =>
+                              cart.setQty(
+                                item.id,
+                                item.size,
+                                parseInt(e.target.value || "1", 10)
+                              )
+                            }
+                          />
+                          <button onClick={() => cart.inc(item.id, item.size)}>+</button>
+                        </div>
+                      </td>
+                      <td style={{ textAlign: "right" }}>
+                        {money(item.qty * item.price)}
+                      </td>
+                      <td style={{ textAlign: "right" }}>
+                        <button onClick={() => cart.remove(item.id, item.size)}>Remove</button>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
 
-          <div style={{ display: "flex", justifyContent: "space-between", marginTop: 16, minWidth: 50 }}>
-            <button onClick={cart.clear}>Clear cart</button>
-            <div className="card" style={{ minWidth: 250 }}>
-              <div style={{ display: "flex", justifyContent: "space-between" }}>
-                <span>Items</span>
-                <strong>{totals.count}</strong>
+              {/* MOBILE CARDS */}
+              <div className="cart-list">
+                {items.map((item) => (
+                  <div key={`${item.id}|${item.size ?? ""}`} className="cart-card">
+                    {item.image && <img src={item.image} alt={item.name} />}
+                    <div>
+                      <div className="name">{item.name}</div>
+                      {item.size && <div className="price">Size: {item.size}</div>}
+                      <div className="total">Total: {money(item.qty * item.price)}</div>
+                      <button
+                        className="remove-btn"
+                        onClick={() => cart.remove(item.id, item.size)}
+                      >
+                        Remove
+                      </button>
+                    </div>
+                    <div className="qty">
+                      <button onClick={() => cart.dec(item.id, item.size)}>-</button>
+                      <span>{item.qty}</span>
+                      <button onClick={() => cart.inc(item.id, item.size)}>+</button>
+                    </div>
+                  </div>
+                ))}
               </div>
-              <div style={{ display: "flex", justifyContent: "space-between", marginTop: 8 }}>
-                <span>Subtotal</span>
-                <strong>{money(totals.subtotal)}</strong>
+            </div>
+
+            {/* SUMMARY */}
+            <div className="cart-actions">
+              <button onClick={cart.clear}>Clear cart</button>
+              <div className="card cart-summary">
+                <div>
+                  <span>Items</span>
+                  <strong>{totals.count}</strong>
+                </div>
+                <div>
+                  <span>Subtotal</span>
+                  <strong>{money(totals.subtotal)}</strong>
+                </div>
+                <button
+                  className="btn btn-primary"
+                  onClick={checkout}
+                  disabled={loading}
+                >
+                  {loading ? "Redirecting…" : "Checkout"}
+                </button>
               </div>
-              <button
-                style={{ marginTop: 12, width: "100%" }}
-                onClick={checkout}
-                disabled={loading}
-              >
-                {loading ? "Redirecting…" : "Checkout"}
-              </button>
             </div>
           </div>
         </>
