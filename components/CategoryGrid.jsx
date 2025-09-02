@@ -33,11 +33,7 @@ export default function CategoryGrid({ category, title, aspect = "3 / 4", fit = 
           <h3 className="subcategory-title">{sub}</h3>
           <div
             className="grid"
-            style={{
-              gridTemplateColumns: "repeat(auto-fit, minmax(220px, 280px))",
-              gap: "16px",
-            }}
-          >
+            >
             {grouped[sub].map((p) => (
               <article key={p._id} className="card product-card">
                 {/* Image */}
