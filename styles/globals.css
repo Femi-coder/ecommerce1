@@ -4,7 +4,7 @@
   --radius-sm: 10px;
   --primary: #1a4fff;
 
-  --bg: #5f6b72;
+  --bg: #ffffff;
   --panel: #ffffff;
   --text: #111111;
   --muted: #6b7280;
@@ -252,8 +252,7 @@ button:active,
 }
 
 .size-btn {
-  width: 32px;
-  height: 32px;
+  width: 40px;
   border-radius: 50%;
   border: 1px solid var(--border);
   background: #fff;
@@ -271,7 +270,7 @@ button:active,
 }
 
 .size-btn.selected {
-  border: 2px solid var(--primary);
+  border: 1px solid var(--primary);
   background: color-mix(in oklab, var(--panel) 88%, var(--primary));
   color: var(--primary);
 }
@@ -601,6 +600,53 @@ button:active,
   .sidebar-title {
     display: block;
   }
+/* Cart icon button + badge */
+.cart-button{
+  position: relative;
+  display: inline-grid;
+  place-items: center;
+  width: 34px;
+  height: 34px;
+  border-radius: 999px;
+  border: 1px solid var(--border);
+  background: var(--panel);
+  color: var(--text);
+  box-shadow: var(--shadow);
+  transition: filter .15s ease, transform .06s ease, background .15s ease;
+}
+.cart-button:hover{ filter: brightness(0.98); }
+.cart-button:active{ transform: translateY(1px); }
+
+.cart-badge{
+  position: absolute;
+  top: -6px;
+  right: -6px;
+  min-width: 18px;
+  height: 18px;
+  padding: 0 5px;
+  border-radius: 999px;
+  background: var(--primary);
+  color: #fff;
+  font-size: 11px;
+  font-weight: 700;
+  line-height: 18px;
+  text-align: center;
+  box-shadow: 0 2px 6px rgba(0,0,0,.2);
+}
+
+/* Align title + icon in the desktop sidebar */
+.sidebar-title-row{
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  margin: 0 0 12px;
+}
+
+/* Show the desktop title row only on ≥769px (you already hide .sidebar-title on mobile) */
+@media (max-width: 768px){
+  .sidebar-title-row{ display:none; }
+}
 
 
 

@@ -3,7 +3,6 @@ import Image from "next/image";
 import { useCart } from "../context/CartContext";
 import { money } from "../lib/format";
 
-/** Turn "6 - 13" or "6-13" into ["6","7",...,"13"]; pass arrays through */
 function normalizeSizes(sizeField) {
   if (Array.isArray(sizeField)) return sizeField.map(String);
   if (typeof sizeField === "string") {

@@ -24,6 +24,7 @@ const nextConfig = {
       { protocol: "https", hostname: "assets.adidas.com" },
       { protocol: "https", hostname: "resources.mandmdirect.com" },
       { protocol: "https", hostname: "images.prodirectsport.com" },
+      { protocol: "https", hostname: "img.ltwebstatic.com" },
     ],
   },
 };
