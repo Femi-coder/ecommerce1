@@ -25,6 +25,8 @@ const nextConfig = {
       { protocol: "https", hostname: "resources.mandmdirect.com" },
       { protocol: "https", hostname: "images.prodirectsport.com" },
       { protocol: "https", hostname: "img.ltwebstatic.com" },
+      { protocol: "https", hostname: "sunnerey.com" },
+      
     ],
   },
 };
